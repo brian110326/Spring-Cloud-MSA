@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: ecommerce
+      # application name을 입력하면 application.yml파일찾아감
+
+#  profiles:
+#    active: dev
