@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>new-toy-msa</artifactId>
+    <artifactId>msa-project</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
     <modules>
@@ -24,7 +24,7 @@
     <name>new-toy-msa</name>
     <description>new-toy-msa</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
