@@ -7,10 +7,13 @@ import com.example.userservice.jpa.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
 import com.netflix.discovery.converters.Auto;
 import feign.FeignException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -28,24 +31,15 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    Environment env;
-    UserRepository userRepository;
-    BCryptPasswordEncoder passwordEncoder;
-    RestTemplate restTemplate;
-    OrderServiceClient orderServiceClient;
-
-    @Autowired
-    public UserServiceImpl(Environment env, UserRepository userRepository,
-                           BCryptPasswordEncoder passwordEncoder,
-                           RestTemplate restTemplate, OrderServiceClient orderServiceClient) {
-        this.env = env;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.restTemplate = restTemplate;
-        this.orderServiceClient = orderServiceClient;
-    }
+    private final Environment env;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final RestTemplate restTemplate;
+    private final OrderServiceClient orderServiceClient;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -98,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
         // 2. Feign Client를 통한 통신
         // Feign Exception Handling
-        List<ResponseOrder> orderList = null;
+        // List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
 
         /*try {
             orderList = orderServiceClient.getOrders(userId);
@@ -106,8 +100,12 @@ public class UserServiceImpl implements UserService {
             log.error(ex.getMessage());
         }*/
 
-        // ErrorDecode Handling
-        orderList = orderServiceClient.getOrders(userId);
+        log.info("Before Call Orders MicroService!!!!");
+        CircuitBreaker circuitbreaker = circuitBreakerFactory.create("circuitbreaker");
+        // 문제가 생긴다면 빈 리스트를 보내준다
+        List<ResponseOrder> orderList = circuitbreaker.run(() -> orderServiceClient.getOrders(userId),
+                throwable -> new ArrayList<>());
+        log.info("After Call Orders MicroService!!!!");
 
         userDto.setOrders(orderList);
 
