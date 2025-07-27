@@ -12,7 +12,7 @@ MSA(Microservices Architecture) 기반으로 설계한 간단한 주문 처리 �
 
 ## 🔧 기술 스택
 
-Spring Boot, Spring Cloud, Kafka, Docker, MySQL, Spring Data JPA
+Spring Boot, Spring Cloud, Kafka, Docker, MariaDB, Spring Data JPA
 
 ## 🛠️ 프로젝트 특징 및 학습 내용
 
