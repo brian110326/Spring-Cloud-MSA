@@ -18,10 +18,17 @@ Spring Boot, Spring Cloud, Kafka, Docker, MySQL, Spring Data JPA
 
 - MSA 설계 방식으로 서비스들을 독립적으로 분리하여 개발  
 - Kafka를 활용한 비동기 이벤트 기반 서비스 간 통신 구현  
+- Docker를 사용해 각 마이크로서비스를 컨테이너화하여 실제 환경에서 동작  
+- Postman을 활용해 API 동작 및 서비스 간 통신 확인  
 - 서비스별 책임과 역할 분담에 따른 시스템 확장성 및 유지보수성 향상  
 - 간단한 주문-재고 연동 프로세스 설계 및 구현 경험
 
 ## 👤 담당 역할
 
 본 프로젝트는 개인 프로젝트로,  
-MSA 기반 서비스 설계부터 구현, Kafka 연동까지 전 과정을 직접 수행했습니다.
+MSA 기반 서비스 설계부터 구현, Kafka 연동, Docker 컨테이너화, 그리고 API 테스트까지 전 과정을 직접 수행했습니다.
+
+## 📦 Docker Hub 이미지
+
+해당 프로젝트는 Docker Hub에 public 이미지로 배포되어 있습니다.
+link : https://hub.docker.com/repositories/brian1103
